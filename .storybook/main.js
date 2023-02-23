@@ -8,17 +8,13 @@ module.exports = {
   addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
   framework: "@storybook/react",
   async viteFinal(config) {
-    // Merge custom configuration into the default config
+    const tableViteConfig = await import('../vite-table.config.js')
+
     return mergeConfig(config, {
-      // Use the same "resolve" configuration as your app
-      // resolve: (await import('../vite.config.js')).default.resolve,
+      ...tableViteConfig,
       resolve: {
-        define: {
-          ...config.define,
-          global: "window",
-        },
         alias: {
-          "@ones-design/table": "/Users/liuzhang/workspace/demo/table",
+          "@ones-design/table": "/Users/liuzhang/workspace/ones/ones-design/packages/table/src/scripts/index.ts",
         },
       },
     });
