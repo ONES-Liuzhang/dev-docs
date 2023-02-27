@@ -1,18 +1,10 @@
 const { mergeConfig } = require("vite");
 const path = require("path");
 const MODIFY_VARS = require("./modify-vars");
-const postcss = require("postcss");
-const ROOT_PATH = path.resolve(
-  process.cwd(),
-  require("../dev-docs.config").projectPath
-);
+const ROOT_PATH = path.resolve(process.cwd(), require("../dev-docs.config").projectPath);
 
 module.exports = {
-  stories: [
-    "../src/**/*.stories.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)",
-    `${ROOT_PATH}/stories/**/*.stories.mdx`,
-  ],
+  stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)", `${ROOT_PATH}/stories/**/*.stories.mdx`],
   features: {
     storyStoreV7: true,
     buildStoriesJson: true,
@@ -21,9 +13,16 @@ module.exports = {
     builder: "@storybook/builder-vite",
   },
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
+    {
+      name: "@storybook/addon-essentials",
+      options: {
+        viewport: false,
+      },
+    },
+    { name: "storybook-design-token", options: { preserveCSSVars: true } },
     "@storybook/addon-interactions",
+    "@etchteam/storybook-addon-status",
+    "@storybook/addon-links",
   ],
   framework: "@storybook/react",
   async viteFinal(config) {
@@ -35,14 +34,7 @@ module.exports = {
             modifyVars: MODIFY_VARS,
           },
         },
-      },
-      plugins: [
-        ,
-        postcss({
-          extensions: [".css"],
-          inject: {
-            insertAt: "top",
-          },
+        postcss: {
           plugins: [
             require("postcss-import"),
             require("postcss-custom-selectors"),
@@ -58,8 +50,8 @@ module.exports = {
               ],
             }),
           ],
-        }),
-      ],
+        },
+      },
       resolve: {
         alias: {
           "@ones-design/table": `${ROOT_PATH}/packages/table/src/scripts/index.ts`,
@@ -75,7 +67,14 @@ module.exports = {
         },
       },
       optimizeDeps: {
-        include: ["dayjs", "@storybook/addon-links/react"],
+        include: [
+          "lodash-es",
+          "dayjs",
+          "@storybook/addon-links/react",
+          "@storybook/react",
+          "storybook-design-token",
+          "@storybook/addon-links",
+        ],
       },
     });
   },
