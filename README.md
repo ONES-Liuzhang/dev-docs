@@ -50,7 +50,7 @@ Error: ENOENT: no such file or directory, rename 'E:\workspace\ones\dev-docs\nod
 
 解决办法：删除 `node_modules/.cache` 和 `node_modules/.vite-storybook`，然后重启服务
 
-1. 错误 2，运行时错误，在加载 tree 组件时会报错
+2. 错误 2，运行时错误，在加载 tree 组件时会报错
 
 ```bash
 ReferenceError: React is not defined at suffix
