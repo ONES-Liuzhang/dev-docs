@@ -1,6 +1,13 @@
 const { mergeConfig } = require("vite");
 const path = require("path");
+const fs = require("fs");
 const MODIFY_VARS = require("./modify-vars");
+
+if (!fs.existsSync(path.resolve(__dirname, "../dev-docs.config.js"))) {
+  console.error("请先阅读 README.md，在根目录下创建 dev-docs.config.js 文件，并导出 projectPath 字段");
+  process.exit(1);
+}
+
 const ROOT_PATH = path.resolve(process.cwd(), require("../dev-docs.config").projectPath);
 
 module.exports = {
