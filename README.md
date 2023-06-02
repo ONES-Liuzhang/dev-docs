@@ -56,19 +56,44 @@ Error: ENOENT: no such file or directory, rename 'E:\workspace\ones\dev-docs\nod
 ReferenceError: React is not defined at suffix
 ```
 
-  产物中已经自动补充了 React，应该是 mdx 里的 args 参数中带了 Jsx 语法导致的问题，临时解决可以在 `tree.stories.mdx` 顶部添加 React 导入，当然，如果你根本不调试这个组件，不用管就行了。
-  产物 👇
+产物中已经自动补充了 React，应该是 mdx 里的 args 参数中带了 Jsx 语法导致的问题，临时解决可以在 `tree.stories.mdx` 顶部添加 React 导入，当然，如果你根本不调试这个组件，不用管就行了。
+产物 👇
 
-  ```js
-    import __vite__cjsImport2_react from "/node_modules/.vite-storybook/deps/react.js?v=6afbfaf7";
-    const useState = __vite__cjsImport2_react["useState"];
-    const useCallback = __vite__cjsImport2_react["useCallback"];
-    const useMemo = __vite__cjsImport2_react["useMemo"];
-  ```
+```js
+import __vite__cjsImport2_react from "/node_modules/.vite-storybook/deps/react.js?v=6afbfaf7";
+const useState = __vite__cjsImport2_react["useState"];
+const useCallback = __vite__cjsImport2_react["useCallback"];
+const useMemo = __vite__cjsImport2_react["useMemo"];
+```
 
-  解决方式：
+解决方式：
 
-  ```jsx
-  // tree.stories.mdx
-  import React from 'react'
-  ```
+```jsx
+// tree.stories.mdx
+import React from "react";
+```
+
+3. 错误 3，无法对样式文件（css/less/...）进行热更新
+
+这可能是因在某一样式文件中通过 inline 的方式引入另一样式文件所导致
+
+**_index.less_**
+
+```less
+@import "antd/es/breadcrumb/style/index.less";
+@import (inline) "./index.css";
+```
+
+通过如上形式构造样式文件的话，会导致对样式的热更新不生效，这可能和 vite 工具底层编译原理有关
+
+解决方式：
+
+放弃 inline 形式的引入，直接在 jsx/tsx 文件中引入多个样式文件
+
+**_index.tsx_**
+
+```jsx
+import React from "react";
+import "./index.less";
+import "./index.css";
+```
