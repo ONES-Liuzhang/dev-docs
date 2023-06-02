@@ -1,4 +1,4 @@
-# dev docs for ONES Design V2
+# dev docs for ONES Design V2.
 
 依赖版本：
 
